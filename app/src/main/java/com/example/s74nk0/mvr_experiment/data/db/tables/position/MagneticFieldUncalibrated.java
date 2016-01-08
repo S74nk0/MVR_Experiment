@@ -31,7 +31,7 @@ public class MagneticFieldUncalibrated extends CommonPositionBase {
         super.set(event, iThrow_id);
         x_iron_bias = event.values[3];
         y_iron_bias = event.values[4];
-        z_iron_bias = event.values[6];
+        z_iron_bias = event.values[5];
     }
 
     public static String getCsvStringHeader() {
