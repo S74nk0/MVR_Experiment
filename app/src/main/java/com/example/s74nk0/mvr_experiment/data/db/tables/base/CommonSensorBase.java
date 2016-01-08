@@ -28,4 +28,12 @@ public abstract class CommonSensorBase extends CommonBaseId {
         accuracy = event.accuracy;
         system_timestamp = System.currentTimeMillis();
     }
+
+    public static String getCsvStringHeader() {
+        return "timestamp, accuracy, system_timestamp";
+    }
+
+    public String getCsvStringValues() {
+        return String.format("%l,%l,%l", timestamp, accuracy, system_timestamp);
+    }
 }

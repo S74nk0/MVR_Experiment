@@ -33,4 +33,17 @@ public abstract class CommonMotionBase extends CommonSensorBase {
         y_axis = event.values[1];
         z_axis = event.values[2];
     }
+
+    public static String getCsvStringHeader() {
+        return String.format("%s,%s",
+                CommonMotionBase.getCsvStringHeader(),
+                "values[0], values[1], values[2]");
+    }
+
+    @Override
+    public String getCsvStringValues() {
+        return String.format("%s,%s",
+                super.getCsvStringValues(),
+                String.format("%f,%f,%f", x_axis, y_axis, z_axis));
+    }
 }

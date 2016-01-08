@@ -32,4 +32,18 @@ public class GyroscopeUncalibrated extends CommonMotionBase {
         y_axis_drift = event.values[4];
         z_axis_drift = event.values[5];
     }
+
+    public static String getCsvStringHeader() {
+        return String.format("%s,%s",
+                CommonMotionBase.getCsvStringHeader(),
+                "values[3], values[4], values[5]");
+    }
+
+    @Override
+    public String getCsvStringValues() {
+        return String.format("%s,%s",
+                super.getCsvStringValues(),
+                String.format("%f,%f,%f", x_axis_drift, y_axis_drift, z_axis_drift));
+    }
+
 }

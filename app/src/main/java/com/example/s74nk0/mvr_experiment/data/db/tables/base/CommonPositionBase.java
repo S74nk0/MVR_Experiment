@@ -27,4 +27,17 @@ public abstract class CommonPositionBase extends CommonSensorBase {
         y_component = event.values[1];
         z_component = event.values[2];
     }
+
+    public static String getCsvStringHeader() {
+        return String.format("%s,%s",
+                CommonMotionBase.getCsvStringHeader(),
+                "values[0], values[1], values[2]");
+    }
+
+    @Override
+    public String getCsvStringValues() {
+        return String.format("%s,%s",
+                super.getCsvStringValues(),
+                String.format("%f,%f,%f", x_component, y_component, z_component));
+    }
 }

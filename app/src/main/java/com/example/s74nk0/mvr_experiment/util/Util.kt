@@ -2,9 +2,13 @@ package com.example.s74nk0.mvr_experiment.util
 
 import android.accounts.AccountManager
 import android.content.Context
+import android.hardware.Sensor
 import android.os.Build
 import android.telephony.TelephonyManager
 import android.util.Log
+import com.example.s74nk0.mvr_experiment.data.db.tables.Throw
+import com.example.s74nk0.mvr_experiment.data.db.tables.motion.*
+import com.example.s74nk0.mvr_experiment.data.db.tables.position.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -80,5 +84,37 @@ object Util {
 
         return stringBuilder.toString()
     }
+
+
+    // TODO tole se porihtaj da vrne CSV header pri attachmentih
+    private fun getCSVHeader(type: Int) : String {
+        when(type) {
+        // motion
+            Sensor.TYPE_ACCELEROMETER -> return Accelerometer.getCsvStringHeader()
+            Sensor.TYPE_GRAVITY -> return Gravity.getCsvStringHeader()
+            Sensor.TYPE_GYROSCOPE -> return Gyroscope.getCsvStringHeader()
+            Sensor.TYPE_GYROSCOPE_UNCALIBRATED -> return GyroscopeUncalibrated.getCsvStringHeader()
+            Sensor.TYPE_LINEAR_ACCELERATION -> return LinearAcceleration.getCsvStringHeader()
+            Sensor.TYPE_ROTATION_VECTOR -> return RotationVector.getCsvStringHeader()
+        // position
+            Sensor.TYPE_GAME_ROTATION_VECTOR -> return GameRotationVector.getCsvStringHeader()
+            Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR -> return GeomagneticRotationVector.getCsvStringHeader()
+            Sensor.TYPE_MAGNETIC_FIELD -> return MagneticField.getCsvStringHeader()
+            Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED -> return MagneticFieldUncalibrated.getCsvStringHeader()
+            else -> return "Unit" // do nothing
+        }
+    }
+
+    fun getCSVStringForThrow(throw_id: Long) : String {
+        return getCSVStringForThrow(Throw.getWithId(throw_id))
+    }
+
+    fun getCSVStringForThrow(throwVar: Throw?) : String {
+        if(throwVar != null) {
+
+        }
+        return "prazno"
+    }
+
 
 }

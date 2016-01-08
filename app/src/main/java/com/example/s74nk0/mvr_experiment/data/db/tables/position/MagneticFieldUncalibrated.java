@@ -3,6 +3,7 @@ package com.example.s74nk0.mvr_experiment.data.db.tables.position;
 import android.hardware.SensorEvent;
 
 import com.example.s74nk0.mvr_experiment.data.db.DatabaseMain;
+import com.example.s74nk0.mvr_experiment.data.db.tables.base.CommonMotionBase;
 import com.example.s74nk0.mvr_experiment.data.db.tables.base.CommonPositionBase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
@@ -32,4 +33,18 @@ public class MagneticFieldUncalibrated extends CommonPositionBase {
         y_iron_bias = event.values[4];
         z_iron_bias = event.values[6];
     }
+
+    public static String getCsvStringHeader() {
+        return String.format("%s,%s",
+                CommonPositionBase.getCsvStringHeader(),
+                "values[3], values[4], values[5]");
+    }
+
+    @Override
+    public String getCsvStringValues() {
+        return String.format("%s,%s",
+                super.getCsvStringValues(),
+                String.format("%f,%f,%f", x_iron_bias, y_iron_bias, z_iron_bias));
+    }
+
 }

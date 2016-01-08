@@ -24,4 +24,18 @@ public class RotationVector extends CommonMotionBase {
         super.set(event, iThrow_id);
         scalar_rotation_component = event.values[3];
     }
+
+    public static String getCsvStringHeader() {
+        return String.format("%s,%s",
+                CommonMotionBase.getCsvStringHeader(),
+                "values[3]");
+    }
+
+    @Override
+    public String getCsvStringValues() {
+        return String.format("%s,%f",
+                super.getCsvStringValues(),
+                scalar_rotation_component);
+    }
+
 }

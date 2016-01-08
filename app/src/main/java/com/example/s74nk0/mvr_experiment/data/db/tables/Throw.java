@@ -1,10 +1,22 @@
 package com.example.s74nk0.mvr_experiment.data.db.tables;
 
 
+import android.hardware.Sensor;
+
 import com.example.s74nk0.mvr_experiment.data.db.DatabaseMain;
 import com.example.s74nk0.mvr_experiment.data.db.tables.base.CommonBaseId;
 import com.example.s74nk0.mvr_experiment.data.db.tables.base.CommonSensorBase;
+import com.example.s74nk0.mvr_experiment.data.db.tables.motion.Accelerometer;
 import com.example.s74nk0.mvr_experiment.data.db.tables.motion.Accelerometer$Table;
+import com.example.s74nk0.mvr_experiment.data.db.tables.motion.Gravity;
+import com.example.s74nk0.mvr_experiment.data.db.tables.motion.Gyroscope;
+import com.example.s74nk0.mvr_experiment.data.db.tables.motion.GyroscopeUncalibrated;
+import com.example.s74nk0.mvr_experiment.data.db.tables.motion.LinearAcceleration;
+import com.example.s74nk0.mvr_experiment.data.db.tables.motion.RotationVector;
+import com.example.s74nk0.mvr_experiment.data.db.tables.position.GameRotationVector;
+import com.example.s74nk0.mvr_experiment.data.db.tables.position.GeomagneticRotationVector;
+import com.example.s74nk0.mvr_experiment.data.db.tables.position.MagneticField;
+import com.example.s74nk0.mvr_experiment.data.db.tables.position.MagneticFieldUncalibrated;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.Table;
@@ -33,6 +45,10 @@ public class Throw extends CommonBaseId {
 
     public void end() {
         timestamp_end = System.currentTimeMillis();
+    }
+
+    public static Throw getWithId(long id) {
+        return new Select().from(Throw.class).where(Condition.column(Throw$Table.ID).eq(id)).querySingle();
     }
 
     public static <T extends CommonSensorBase>List<T> getAll(Class<T> tClass, long throw_id) {
