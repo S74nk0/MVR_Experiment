@@ -1,12 +1,15 @@
 package com.example.s74nk0.mvr_experiment.util
 
 import android.accounts.AccountManager
+import android.app.Activity
 import android.content.Context
 import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.os.Build
 import android.telephony.TelephonyManager
 import android.util.Log
 import com.example.s74nk0.mvr_experiment.data.db.tables.Throw
+import com.example.s74nk0.mvr_experiment.data.db.tables.base.CommonSensorBase
 import com.example.s74nk0.mvr_experiment.data.db.tables.motion.*
 import com.example.s74nk0.mvr_experiment.data.db.tables.position.*
 import java.text.SimpleDateFormat
@@ -82,11 +85,38 @@ object Util {
         stringBuilder.appendAndLogWithNewline("Device info :", TAG)
         stringBuilder.appendAndLogWithNewline(Util.deviceInfo, TAG)
 
+        stringBuilder.appendAndLogWithNewline("Device weight: " + getPhoneWeight(context), TAG)
+
+        // append avaliable sensors
+        stringBuilder.appendAndLogWithNewline("Avaliable sensors: ", TAG)
+        var sensorManager = context.getSystemService(Activity.SENSOR_SERVICE) as SensorManager
+        for(sensorInt in Util.REGISTER_SENSORS) {
+            var sensor = sensorManager?.getDefaultSensor(sensorInt)
+            if(sensor != null) {
+                stringBuilder.appendAndLogWithNewline(getSensorName(sensorInt) + " YES", TAG)
+            } else {
+                stringBuilder.appendAndLogWithNewline(getSensorName(sensorInt) + " NO", TAG)
+            }
+        }
+
         return stringBuilder.toString()
     }
 
+    val REGISTER_SENSORS = intArrayOf(
+            // motion
+            Sensor.TYPE_ACCELEROMETER,
+            Sensor.TYPE_GRAVITY,
+            Sensor.TYPE_GYROSCOPE,
+            Sensor.TYPE_GYROSCOPE_UNCALIBRATED,
+            Sensor.TYPE_LINEAR_ACCELERATION,
+            Sensor.TYPE_ROTATION_VECTOR,
+            // position
+            Sensor.TYPE_GAME_ROTATION_VECTOR,
+            Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR,
+            Sensor.TYPE_MAGNETIC_FIELD,
+            Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED
+    )
 
-    // TODO tole se porihtaj da vrne CSV header pri attachmentih
     private fun getCSVHeader(type: Int) : String {
         when(type) {
         // motion
@@ -105,16 +135,65 @@ object Util {
         }
     }
 
-    fun getCSVStringForThrow(throw_id: Long) : String {
-        return getCSVStringForThrow(Throw.getWithId(throw_id))
+    fun getSensorName(type: Int) : String {
+        val typeName = when(type) {
+        // motion
+            Sensor.TYPE_ACCELEROMETER -> "Accelerometer"
+            Sensor.TYPE_GRAVITY -> "Gravity"
+            Sensor.TYPE_GYROSCOPE -> "Gyroscope"
+            Sensor.TYPE_GYROSCOPE_UNCALIBRATED -> "GyroscopeUncalibrated"
+            Sensor.TYPE_LINEAR_ACCELERATION -> "LinearAcceleration"
+            Sensor.TYPE_ROTATION_VECTOR -> "RotationVector"
+        // position
+            Sensor.TYPE_GAME_ROTATION_VECTOR -> "GameRotationVector"
+            Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR -> "GeomagneticRotationVector"
+            Sensor.TYPE_MAGNETIC_FIELD -> "MagneticField"
+            Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED -> "MagneticFieldUncalibrated"
+            else -> "Unit" // do nothing
+        }
+
+        return typeName
     }
 
-    fun getCSVStringForThrow(throwVar: Throw?) : String {
-        if(throwVar != null) {
+    fun getCSVFileName(type: Int, throw_id: Long) : String {
+        val typeName = getSensorName(type)
+        return "measure-throwid-$throw_id-$typeName.csv"
+    }
 
+//    fun <T: CommonSensorBase>getCSVStringForThrow(type: Int, throw_id: Long, clazz: Class<T>) : String {
+//        return getCSVStringForThrow(type, Throw.getWithId(throw_id), clazz)
+//    }
+
+    fun <T: CommonSensorBase>getCSVStringForThrow(type: Int, throwVar: Throw?, clazz: Class<T>) : String {
+        if(throwVar != null) {
+            val TAG = "getFulAccountAndDevice"
+            val stringBuilder = StringBuilder()
+
+            // add header
+            stringBuilder.appendAndLogWithNewline(Util.getCSVHeader(type) ,TAG)
+            // add measurements
+            val entries = throwVar.getAllForSensor(clazz)
+            for(entry in entries) {
+                stringBuilder.appendAndLogWithNewline(entry.csvStringValues ,TAG)
+            }
+            return stringBuilder.toString()
         }
         return "prazno"
     }
 
+    // weight shared preferances stuff
+    val MY_PREFERANCES_KEY = "MY_PREFERANCES_KEY"
+    val PHONE_WIGHT_KEY = "PHONE_WIGHT_KEY"
+    fun savePhoneWeight(context: Context, phoneWeight: String) {
+        val runCheckSettings = context.getSharedPreferences(MY_PREFERANCES_KEY, Context.MODE_PRIVATE) //load the preferences
+        val edit = runCheckSettings.edit()
+        edit.putString(PHONE_WIGHT_KEY, phoneWeight)
+        edit.commit() //apply
+    }
+
+    fun getPhoneWeight(context: Context) : String {
+        val runCheckSettings = context.getSharedPreferences(MY_PREFERANCES_KEY, Context.MODE_PRIVATE) //load the preferences
+        return runCheckSettings.getString(PHONE_WIGHT_KEY, "0")
+    }
 
 }

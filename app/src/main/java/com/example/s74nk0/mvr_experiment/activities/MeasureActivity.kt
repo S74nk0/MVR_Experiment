@@ -13,6 +13,7 @@ import android.view.MotionEvent
 import android.widget.LinearLayout
 import com.example.s74nk0.mvr_experiment.R
 import com.example.s74nk0.mvr_experiment.data.data_helpers.ThrowSensorsMeasurements
+import com.example.s74nk0.mvr_experiment.util.Util
 
 
 class MeasureActivity : Activity(), SensorEventListener {
@@ -66,23 +67,8 @@ class MeasureActivity : Activity(), SensorEventListener {
         registerSensorManagerListeners()
     }
 
-    internal val REGISTER_SENSORS = intArrayOf(
-        // motion
-        Sensor.TYPE_ACCELEROMETER,
-        Sensor.TYPE_GRAVITY,
-        Sensor.TYPE_GYROSCOPE,
-        Sensor.TYPE_GYROSCOPE_UNCALIBRATED,
-        Sensor.TYPE_LINEAR_ACCELERATION,
-        Sensor.TYPE_ROTATION_VECTOR,
-        // position
-        Sensor.TYPE_GAME_ROTATION_VECTOR,
-        Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR,
-        Sensor.TYPE_MAGNETIC_FIELD,
-        Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED
-    )
-
     private fun registerSensorManagerListeners() {
-        for(sensorInt in REGISTER_SENSORS) {
+        for(sensorInt in Util.REGISTER_SENSORS) {
             var sensor = mSensorManager?.getDefaultSensor(sensorInt)
             if(sensor != null) {
                 mSensorManager?.registerListener(
@@ -127,13 +113,21 @@ class MeasureActivity : Activity(), SensorEventListener {
     }
 
     private fun actionDown() {
-        resetExitParams()
+        mIsMeasure = false
         mMainLayout?.setBackgroundColor(Color.GREEN)
+        if(throwSensorsMeasurements.getIsStart() == false) {
+            throwSensorsMeasurements.start()
+        } else {
+            throwSensorsMeasurements.end()
+            throwSensorsMeasurements = ThrowSensorsMeasurements()
+        }
+        resetExitParams()
     }
 
     private fun actionUp() {
         resetExitParams()
         mMainLayout?.setBackgroundColor(Color.BLUE)
+        mIsMeasure = true
     }
 
     private fun resetExitParams() {

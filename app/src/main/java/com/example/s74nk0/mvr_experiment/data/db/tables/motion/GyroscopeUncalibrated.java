@@ -17,13 +17,13 @@ public class GyroscopeUncalibrated extends CommonMotionBase {
 
     @Column
     @NotNull
-    public float x_axis_drift; // 3
+    public float x_axis_drift = 0.0f; // 3
     @Column
     @NotNull
-    public float y_axis_drift; // 4
+    public float y_axis_drift = 0.0f; // 4
     @Column
     @NotNull
-    public float z_axis_drift; // 5
+    public float z_axis_drift = 0.0f; // 5
 
     @Override
     public void set(SensorEvent event, long iThrow_id) {

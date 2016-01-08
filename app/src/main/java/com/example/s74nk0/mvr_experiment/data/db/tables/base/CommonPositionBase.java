@@ -12,13 +12,13 @@ public abstract class CommonPositionBase extends CommonSensorBase {
     // common sensor data
     @Column
     @NotNull
-    public float x_component; // 0
+    public float x_component = 0.0f; // 0
     @Column
     @NotNull
-    public float y_component; // 1
+    public float y_component = 0.0f; // 1
     @Column
     @NotNull
-    public float z_component; // 2
+    public float z_component = 0.0f; // 2
     // methods
     @Override
     public void set(SensorEvent event, long iThrow_id) {
@@ -30,7 +30,7 @@ public abstract class CommonPositionBase extends CommonSensorBase {
 
     public static String getCsvStringHeader() {
         return String.format("%s,%s",
-                CommonMotionBase.getCsvStringHeader(),
+                CommonSensorBase.getCsvStringHeader(),
                 "values[0], values[1], values[2]");
     }
 

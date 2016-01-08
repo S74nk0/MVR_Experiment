@@ -15,27 +15,29 @@ import com.raizlabs.android.dbflow.annotation.Table;
 public class RotationVector extends CommonMotionBase {
     public static final String NAME = "RotationVector";
 
-    @Column
-    @NotNull
-    public float scalar_rotation_component; // 3
-
-    @Override
-    public void set(SensorEvent event, long iThrow_id) {
-        super.set(event, iThrow_id);
-        scalar_rotation_component = event.values[3];
-    }
-
-    public static String getCsvStringHeader() {
-        return String.format("%s,%s",
-                CommonMotionBase.getCsvStringHeader(),
-                "values[3]");
-    }
-
-    @Override
-    public String getCsvStringValues() {
-        return String.format("%s,%f",
-                super.getCsvStringValues(),
-                scalar_rotation_component);
-    }
+//    out of range...
+//    zato zakomentiran
+//    @Column
+//    @NotNull
+//    public float scalar_rotation_component = 0.0f; // 3
+//
+//    @Override
+//    public void set(SensorEvent event, long iThrow_id) {
+//        super.set(event, iThrow_id);
+//        scalar_rotation_component = event.values[3];
+//    }
+//
+//    public static String getCsvStringHeader() {
+//        return String.format("%s,%s",
+//                CommonMotionBase.getCsvStringHeader(),
+//                "values[3]");
+//    }
+//
+//    @Override
+//    public String getCsvStringValues() {
+//        return String.format("%s,%f",
+//                super.getCsvStringValues(),
+//                scalar_rotation_component);
+//    }
 
 }

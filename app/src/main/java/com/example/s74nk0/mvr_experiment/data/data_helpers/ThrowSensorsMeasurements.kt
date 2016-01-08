@@ -13,6 +13,7 @@ import com.example.s74nk0.mvr_experiment.data.db.tables.position.*
 class ThrowSensorsMeasurements {
     internal val OBJECT_POOL_SIZE: Long = 20000 // sampling rate ki je najverjetneje overkill ampak ajde
 
+    private var isStart = false
     private var throwVar: Throw = Throw()
 
     // motion stuff
@@ -28,9 +29,11 @@ class ThrowSensorsMeasurements {
     private var magnetic_fieldPool: PrealocatedList<MagneticField> = PrealocatedList(OBJECT_POOL_SIZE, ::MagneticField)
     private var magnetic_field_uncalibratedPool: PrealocatedList<MagneticFieldUncalibrated> = PrealocatedList(OBJECT_POOL_SIZE, ::MagneticFieldUncalibrated)
 
+    fun getIsStart() = isStart
+
     // methods
     fun start() {
-        throwVar.save() // da se naredi id
+        isStart = true
         throwVar.start()
     }
 

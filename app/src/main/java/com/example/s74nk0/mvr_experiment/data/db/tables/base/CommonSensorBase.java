@@ -11,16 +11,16 @@ import com.raizlabs.android.dbflow.annotation.NotNull;
 public abstract class CommonSensorBase extends CommonBaseId {
     @Column
     @NotNull
-    public long throw_id;
+    public long throw_id = -1;
     @Column
     @NotNull
-    public long timestamp;
+    public long timestamp = -1;
     @Column
     @NotNull
-    public long accuracy;
+    public long accuracy = -1;
     @Column
     @NotNull
-    public long system_timestamp;
+    public long system_timestamp = -1;
 
     public void set(SensorEvent event, long iThrow_id) {
         throw_id = iThrow_id;
@@ -34,6 +34,6 @@ public abstract class CommonSensorBase extends CommonBaseId {
     }
 
     public String getCsvStringValues() {
-        return String.format("%l,%l,%l", timestamp, accuracy, system_timestamp);
+        return String.format("%d,%d,%d", timestamp, accuracy, system_timestamp);
     }
 }
